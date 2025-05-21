@@ -1,4 +1,4 @@
-FROM golang:1.23.3
+FROM golang:1.22.0
 
 WORKDIR /app
 
@@ -6,12 +6,8 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
-RUN go get github.com/go-chi/chi/v5
+COPY * ./
 
-COPY *.go ./
+RUN GOOS=linux GOARCH=amd64 go build -o /myapp
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /my_app
-
-CMD ["/my_app"] 
-
-RUN go mod tidy
+CMD ["/myapp"]
